@@ -1,15 +1,14 @@
 const bcrypt = require("bcryptjs");
-const e = require("express");
 
 const db = require("../data/database");
 
 class User {
-  constructor(email, password, fullname, steet, postal, city) {
+  constructor(email, password, fullname, street, postal, city) {
     this.email = email;
     this.password = password;
     this.name = fullname;
     this.address = {
-      steet: steet,
+      street: street,
       postalCode: postal,
       city: city,
     };
@@ -17,6 +16,14 @@ class User {
 
   getUserWithSameEmail() {
     return db.getDb().collection("users").findOne({ email: this.email });
+  }
+
+  async existsAlready() {
+    const existingUser = await this.getUserWithSameEmail();
+    if (existingUser) {
+      return true;
+    }
+    return false;
   }
 
   async signup() {
@@ -36,3 +43,4 @@ class User {
 }
 
 module.exports = User;
+Footer;
